@@ -6,7 +6,7 @@
       <article v-for="w in rows" :key="w.id" class="card" @click="$router.push('/wishes/'+w.id)">
         <h3>{{ w.title || '（无标题）' }}</h3>
         <p>{{ w.note }}</p>
-        <span class="tag">{{ w.status }} · {{ w.data_quality }}</span>
+        <span class="tag">{{ w.status }} · {{ w.data_quality }} · 留言 {{ w.comment_count || 0 }} 楼</span>
       </article>
     </div>
   </div>

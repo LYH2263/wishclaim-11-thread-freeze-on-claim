@@ -9,4 +9,6 @@ def db_path() -> Path:
 def connect():
     c = sqlite3.connect(db_path())
     c.row_factory = sqlite3.Row
+    # Writers use BEGIN IMMEDIATE; wait on contention instead of failing fast.
+    c.execute("PRAGMA busy_timeout=5000")
     return c

@@ -1,4 +1,5 @@
 from app.db import connect
+from app.modules import wish_comment
 
 def init_db():
     c = connect()
@@ -9,6 +10,7 @@ def init_db():
     );
     CREATE TABLE IF NOT EXISTS settings(key TEXT PRIMARY KEY, value TEXT);
     """)
+    wish_comment.init_schema(c)
     if c.execute("SELECT COUNT(*) c FROM wishes").fetchone()["c"] == 0:
         c.executemany(
             "INSERT INTO wishes(title,note,status,claimer,claimed_at,expires_at,data_quality) VALUES (?,?,?,?,?,?,?)",
@@ -22,5 +24,6 @@ def init_db():
         )
         c.execute("INSERT INTO settings(key,value) VALUES ('ttl_seconds','86400')")
         c.execute("INSERT INTO settings(key,value) VALUES ('wall_title','暖粉愿望墙')")
+        c.execute("INSERT INTO settings(key,value) VALUES ('comment_max_length','500')")
         c.commit()
     c.close()
