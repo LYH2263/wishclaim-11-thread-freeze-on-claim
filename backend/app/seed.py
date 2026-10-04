@@ -8,6 +8,15 @@ def init_db():
       claimer TEXT, claimed_at TEXT, expires_at TEXT, data_quality TEXT
     );
     CREATE TABLE IF NOT EXISTS settings(key TEXT PRIMARY KEY, value TEXT);
+    CREATE TABLE IF NOT EXISTS comments(
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      wish_id INTEGER NOT NULL,
+      floor INTEGER NOT NULL,
+      author TEXT NOT NULL,
+      content TEXT NOT NULL,
+      created_at TEXT NOT NULL,
+      UNIQUE(wish_id, floor)
+    );
     """)
     if c.execute("SELECT COUNT(*) c FROM wishes").fetchone()["c"] == 0:
         c.executemany(
@@ -22,5 +31,13 @@ def init_db():
         )
         c.execute("INSERT INTO settings(key,value) VALUES ('ttl_seconds','86400')")
         c.execute("INSERT INTO settings(key,value) VALUES ('wall_title','暖粉愿望墙')")
+        c.executemany(
+            "INSERT INTO comments(wish_id,floor,author,content,created_at) VALUES (?,?,?,?,?)",
+            [
+                (1, 1, "小林", "红轴码字舒服，蹲一个好价。", "2026-01-01T09:00:00+00:00"),
+                (1, 2, "阿May", "我也想要，预算内提醒我。", "2026-01-01T10:00:00+00:00"),
+                (2, 1, "小林", "羊毛的起球吗？", "2026-01-02T09:00:00+00:00"),
+            ],
+        )
         c.commit()
     c.close()

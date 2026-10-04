@@ -5,6 +5,7 @@
     <article v-for="w in rows" :key="w.id" class="card">
       <h3>{{ w.title }}</h3>
       <span class="tag">{{ w.status }} · 到期 {{ w.expires_at }}</span>
+      <span class="tag"> · 留言 {{ w.comment_count || 0 }} 楼</span>
     </article>
   </div>
 </template>
